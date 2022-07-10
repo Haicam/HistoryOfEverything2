@@ -64,6 +64,7 @@ class _TimelineWidgetState extends State<TimelineWidget> {
   /// and pass the relevant information down to the [Timeline], so that it can display
   /// all the relevant information properly.
   void _scaleStart(ScaleStartDetails details) {
+    debugPrint("_scaleStart ... ");
     _lastFocalPoint = details.focalPoint;
     _scaleStartYearStart = timeline.start;
     _scaleStartYearEnd = timeline.end;
@@ -72,6 +73,7 @@ class _TimelineWidgetState extends State<TimelineWidget> {
   }
 
   void _scaleUpdate(ScaleUpdateDetails details) {
+    debugPrint("_scaleUpdate ... " + details.scale.toString());
     double changeScale = details.scale;
     double scale =
         (_scaleStartYearEnd - _scaleStartYearStart) / context.size.height;
@@ -87,6 +89,7 @@ class _TimelineWidgetState extends State<TimelineWidget> {
   }
 
   void _scaleEnd(ScaleEndDetails details) {
+    debugPrint("_scaleEnd ... ");
     timeline.isInteracting = false;
     timeline.setViewport(
         velocity: details.velocity.pixelsPerSecond.dy, animate: true);

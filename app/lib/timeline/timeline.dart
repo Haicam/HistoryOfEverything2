@@ -430,9 +430,13 @@ class Timeline {
           TimelineAsset asset;
           Map assetMap = map["asset"] as Map;
           String source = assetMap["source"];
-          String filename = "assets/" + source;
-          String extension = getExtension(source);
+          // only use image
+          source = "photo-test.jpg";
 
+          String filename = "assets/" + source;
+
+          String extension = getExtension(source);
+    
           /// Instantiate the correct object based on the file extension.
           switch (extension) {
             case "flr":
@@ -793,7 +797,7 @@ class Timeline {
     if (!animate) {
       _renderStart = start;
       _renderEnd = end;
-      advance(0.0, false);
+      advanceCal(0.0, false);
       if (onNeedPaint != null) {
         onNeedPaint();
       }
@@ -820,7 +824,7 @@ class Timeline {
     double elapsed = t - _lastFrameTime;
     _lastFrameTime = t;
 
-    if (!advance(elapsed, true) && !_isFrameScheduled) {
+    if (!advanceCal(elapsed, true) && !_isFrameScheduled) {
       _isFrameScheduled = true;
       SchedulerBinding.instance.scheduleFrameCallback(beginFrame);
     }
@@ -860,11 +864,13 @@ class Timeline {
         : _headerColors.last;
   }
 
-  bool advance(double elapsed, bool animate) {
+  bool advanceCal(double elapsed, bool animate) {
     if (_height <= 0) {
       /// Done rendering. Need to wait for height.
       return true;
     }
+
+    debugPrint("advanceCal > " + elapsed.toString());
 
     /// The current scale based on the rendering area.
     double scale = _height / (_renderEnd - _renderStart);

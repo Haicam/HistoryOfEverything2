@@ -247,9 +247,12 @@ class TimelineRenderObject extends RenderBox {
     double renderEnd = _timeline.renderEnd;
     double scale = size.height / (renderEnd - renderStart);
 
+    debugPrint("scale = size.height / (renderEnd - renderStart -> " + size.height.toString() + " " + renderEnd.toString() + " " + renderStart.toString()); 
+
     if (timeline.renderAssets != null) {
       canvas.save();
       canvas.clipRect(offset & size);
+      debugPrint("timeline.renderAssets -> " + timeline.renderAssets.length.toString());
       for (TimelineAsset asset in timeline.renderAssets) {
         if (asset.opacity > 0) {
           double rs = 0.2 + asset.scale * 0.8;
@@ -946,11 +949,14 @@ class TimelineRenderObject extends RenderBox {
       List<TimelineEntry> entries, double x, double scale, int depth) {
     final Canvas canvas = context.canvas;
 
+    //debugPrint("drawItems count: " + entries.length.toString());
+
     for (TimelineEntry item in entries) {
       if (!item.isVisible ||
           item.y > size.height + Timeline.BubbleHeight ||
           item.endY < -Timeline.BubbleHeight) {
         /// Don't paint this item.
+        //debugPrint("drawItems isVisible: " + item.isVisible.toString());
         continue;
       }
 

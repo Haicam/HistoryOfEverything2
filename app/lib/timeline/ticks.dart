@@ -16,9 +16,10 @@ class Ticks {
   static const double Width = 40.0;
   static const double LabelPadLeft = 5.0;
   static const double LabelPadRight = 1.0;
-  static const int TickDistance = 16;
-  static const int TextTickDistance = 64;
-  static const double TickSize = 15.0;
+  static const int TickDistance = 4;
+  static const int TextTickDistance = 40;
+  static const double TickSize = 20.0;
+  static const double MiddleTickSize = 10.0;
   static const double SmallTickSize = 5.0;
 
   /// Other than providing the [PaintingContext] to allow the ticks to paint themselves,
@@ -68,6 +69,16 @@ class Ticks {
     /// Move back by one tick.
     tickOffset -= scaledTickDistance;
     startingTickMarkValue -= tickDistance;
+
+    debugPrint("startingTickMarkValue -> " + startingTickMarkValue.toString()); // start years
+    debugPrint("y -> " + y.toString());
+    debugPrint("tickDistance -> " + tickDistance.toString()); // years
+    debugPrint("textTickDistance -> " + textTickDistance.toString()); // years
+
+    debugPrint("height -> " + height.toString());// 730 pixels
+    debugPrint("scale -> " + scale.toString()); // 0 .. 30 .. 800 => size.height(730) / (renderEnd(1955) - renderStart(1930));
+    debugPrint("scaledTickDistance -> " + scaledTickDistance.toString());// 17 <-> height
+    debugPrint("numTicks -> " + numTicks.toString()); // 36
 
     /// Ticks can change color because the timeline background will also change color
     /// depending on the current era. The [TickColors] object, in `timeline_utils.dart`,
@@ -120,6 +131,11 @@ class Ticks {
 
     Set<String> usedValues = Set<String>();
 
+    canvas.drawRect(
+            Rect.fromLTWH(offset.dx + gutterWidth + TickSize,
+                200, TickSize * 10, 1.0),
+            Paint()..color = Color.fromARGB(255, 255, 0, 0));
+
     /// Draw all the ticks.
     for (int i = 0; i < numTicks; i++) {
       tickOffset += scaledTickDistance;
@@ -165,11 +181,18 @@ class Ticks {
             Offset(offset.dx + LabelPadLeft - LabelPadRight,
                 offset.dy + height - o - tickParagraph.height - 5));
       } else {
-        /// If we're within two text-ticks, just draw a smaller line.
-        canvas.drawRect(
-            Rect.fromLTWH(offset.dx + gutterWidth - SmallTickSize,
-                offset.dy + height - o, SmallTickSize, 1.0),
-            Paint()..color = colors.short);
+         if (tt % (textTickDistance/2) == 0) {
+            canvas.drawRect(
+              Rect.fromLTWH(offset.dx + gutterWidth - MiddleTickSize,
+                  offset.dy + height - o, MiddleTickSize, 1.0),
+              Paint()..color = colors.short);
+         } else {
+          /// If we're within two text-ticks, just draw a smaller line.
+          canvas.drawRect(
+              Rect.fromLTWH(offset.dx + gutterWidth - SmallTickSize,
+                  offset.dy + height - o, SmallTickSize, 1.0),
+              Paint()..color = colors.short);
+         }
       }
       startingTickMarkValue += tickDistance;
     }

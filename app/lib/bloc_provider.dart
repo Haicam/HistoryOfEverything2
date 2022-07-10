@@ -33,7 +33,7 @@ class BlocProvider extends InheritedWidget {
           animate: true);
 
       /// Advance the timeline to its starting position.
-      timeline.advance(0.0, false);
+      timeline.advanceCal(0.0, false);
 
       /// All the entries are loaded, we can fill in the [favoritesBloc]...
       favoritesBloc.init(entries);

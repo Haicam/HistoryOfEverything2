@@ -132,6 +132,19 @@ class Ticks {
                 200, TickSize * 10, 1.0),
             Paint()..color = Color.fromARGB(255, 255, 0, 0));
 
+        /// Drawing text to [canvas] is done by using the [ParagraphBuilder] directly.
+    ui.ParagraphBuilder builder = ui.ParagraphBuilder(ui.ParagraphStyle(
+        textAlign: TextAlign.end, fontFamily: "Roboto", fontSize: 10.0))
+      ..pushStyle(ui.TextStyle(color: Color.fromARGB(255, 0, 0, 255)));
+
+    builder.addText("The year near the red line below");
+    ui.Paragraph tickParagraph = builder.build();
+    tickParagraph.layout(ui.ParagraphConstraints(width:200));
+    canvas.drawParagraph(
+        tickParagraph,
+        Offset(offset.dx + gutterWidth + TickSize,
+            180));
+
     Set<String> usedValues = Set<String>();
 
     /// Draw all the ticks.
